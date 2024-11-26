@@ -1,4 +1,4 @@
-package rkrk.reservation_batch
+package rkrk.batch
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
