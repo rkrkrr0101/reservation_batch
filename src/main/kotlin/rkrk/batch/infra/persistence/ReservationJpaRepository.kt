@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Lock
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.jpa.repository.QueryHints
+import org.springframework.stereotype.Repository
 import rkrk.batch.infra.persistence.entity.ReservationJpaEntity
 import java.time.LocalDateTime
 
+@Repository
 interface ReservationJpaRepository : JpaRepository<ReservationJpaEntity, Long> {
     @Query(
         " select r from ReservationJpaEntity r " +
