@@ -6,6 +6,9 @@ server:
       force-response: true
   port: 8081
 spring:
+  batch:
+    jdbc:
+      initialize-schema: always
   application:
     name: reservation_batch
   config:
