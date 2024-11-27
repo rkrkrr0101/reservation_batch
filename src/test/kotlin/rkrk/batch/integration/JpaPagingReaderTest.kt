@@ -26,8 +26,8 @@ class JpaPagingReaderTest(
     private val initHelper = InitHelper()
 
     @Test
-    @DisplayName("aa")
-    fun abcd() {
+    @DisplayName("잡을 실행시켜서 20분이 지난 임시예약을 취소시킬수있다")
+    fun cancelPendingReservation() {
         initHelper.jdbcCreate(jdbcTemplate)
 
         val jobExecution = jobLauncherTestUtils.launchJob()
