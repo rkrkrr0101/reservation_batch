@@ -11,4 +11,7 @@ reservation,warehouse 가져오기//완
 
 
 테스트만들기
-    테스트에서 createAt의 시간의존성떄문에 테스트가 안됨
+    테스트에서 createAt의 시간의존성떄문에 테스트가 안됨(DateTimeProvider mocking)
+    https://stackoverflow.com/questions/42374387/how-to-set-createddate-in-the-past-for-testing
+
+    아니면 해당용도로 필드 새로만들기?

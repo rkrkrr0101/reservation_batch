@@ -79,8 +79,6 @@ class PendingReservationConfig(
         reader.setEntityManagerFactory(emFactory)
         reader.pageSize = chunkSize
         reader.setQueryProvider(queryProvider)
-        println(customDateTime.getNow())
-        println(customDateTime.getNow().minusMinutes(20))
         reader.setParameterValues(mapOf("thresholdTime" to customDateTime.getNow().minusMinutes(20)))
 
         return reader

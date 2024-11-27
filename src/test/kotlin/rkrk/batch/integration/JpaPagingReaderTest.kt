@@ -7,35 +7,41 @@ import org.springframework.batch.core.BatchStatus
 import org.springframework.batch.test.JobLauncherTestUtils
 import org.springframework.batch.test.context.SpringBatchTest
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.context.TestPropertySource
 import rkrk.batch.component.PendingReservationConfig
 import rkrk.batch.helper.InitHelper
 import rkrk.batch.infra.persistence.ReservationJpaRepository
-import rkrk.batch.infra.persistence.WareHouseJpaRepository
+import rkrk.batch.infra.persistence.domain.ReservationStatus
 import rkrk.reservation.helper.SpringTestContainerTest
 
 @SpringTestContainerTest
 @SpringBatchTest
 @TestPropertySource(properties = ["job.name=" + PendingReservationConfig.JOB_NAME ])
 class JpaPagingReaderTest(
-    @Autowired private val wareHouseJpaRepository: WareHouseJpaRepository,
     @Autowired private val reservationJpaRepository: ReservationJpaRepository,
     @Autowired private val jobLauncherTestUtils: JobLauncherTestUtils,
+    @Autowired private val jdbcTemplate: JdbcTemplate,
 ) {
     private val initHelper = InitHelper()
 
     @Test
     @DisplayName("aa")
     fun abcd() {
-        initHelper.basicInit(wareHouseJpaRepository, reservationJpaRepository)
-        // jpaPagingItemReader.set
-        reservationJpaRepository.findAll().forEach { println(it.state) }
+        initHelper.jdbcCreate(jdbcTemplate)
 
         val jobExecution = jobLauncherTestUtils.launchJob()
 
-        Assertions.assertThat(jobExecution.status).isEqualTo(BatchStatus.COMPLETED)
+        val reservationJpaEntities = reservationJpaRepository.findAll()
 
-        reservationJpaRepository.findAll().forEach { println(it.state) }
-        reservationJpaRepository.findAll().forEach { println(it.createdAt) }
+        Assertions.assertThat(jobExecution.status).isEqualTo(BatchStatus.COMPLETED)
+        Assertions
+            .assertThat(
+                reservationJpaEntities.filter { it.state == ReservationStatus.PENDING }.size,
+            ).isEqualTo(2)
+        Assertions
+            .assertThat(
+                reservationJpaEntities.filter { it.state == ReservationStatus.CANCELLED }.size,
+            ).isEqualTo(1)
     }
 }
